@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_add_place) {
-
+            Intent intent = new Intent(this, PlaceInsertActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_list_places) {
             Intent intent = new Intent(this, ListActivity.class);
             startActivity(intent);

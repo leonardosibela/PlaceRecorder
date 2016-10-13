@@ -11,12 +11,14 @@
     tools:context="com.siblea.placerecorder.PlaceInsertActivity">
 
     <EditText
+        android:maxLines="1"
         android:id="@+id/place_name_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name" />
 
     <EditText
+        android:maxLines="3"
         android:id="@+id/place_description_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

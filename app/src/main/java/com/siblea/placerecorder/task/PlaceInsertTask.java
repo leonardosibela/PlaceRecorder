@@ -10,6 +10,8 @@ public interface PlaceInsertTask {
         void onPlaceAdded(Place place);
 
         void errorAddingPlace(Place place);
+
+        void cleanFields();
     }
 
     interface Presenter {
