@@ -1,5 +1,6 @@
 package com.siblea.placerecorder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -51,9 +52,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_add_place) {
-        
-        } else if (id == R.id.nav_list_places) {
 
+        } else if (id == R.id.nav_list_places) {
+            Intent intent = new Intent(this, ListActivity.class);
+            startActivity(intent);
         }
 
         drawer.closeDrawer(GravityCompat.START);
