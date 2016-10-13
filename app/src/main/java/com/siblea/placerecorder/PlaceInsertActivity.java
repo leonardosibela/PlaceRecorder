@@ -1,11 +1,16 @@
 package com.siblea.placerecorder;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.siblea.placerecorder.model.Place;
 import com.siblea.placerecorder.presenter.PlaceInsertPresenter;
 import com.siblea.placerecorder.task.PlaceInsertTask;
@@ -14,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View {
+public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.place_name_input)
     EditText nameInput;
@@ -29,6 +34,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
     TextView longitude;
 
     PlaceInsertTask.Presenter presenter;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,24 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
         ButterKnife.bind(this);
 
         presenter = new PlaceInsertPresenter(this, this);
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    protected void onStart() {
+        googleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        googleApiClient.disconnect();
+        super.onStop();
     }
 
     @OnClick(R.id.add_place_button)
@@ -81,5 +105,20 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
     public void cleanFields() {
         nameInput.setText("");
         descriptionInput.setText("");
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }
