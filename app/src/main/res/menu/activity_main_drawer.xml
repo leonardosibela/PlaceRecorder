@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_add_place"
+        android:icon="@drawable/ic_add_location_black_24dp"
+        android:title="Add Place" />
+
+    <item
+        android:id="@+id/nav_list_places"
+        android:icon="@drawable/ic_list_black_24dp"
+        android:title="List Places" />
+
+</menu>
