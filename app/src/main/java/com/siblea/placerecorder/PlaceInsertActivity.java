@@ -1,5 +1,6 @@
 package com.siblea.placerecorder;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -35,6 +36,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
 
     PlaceInsertTask.Presenter presenter;
     private GoogleApiClient googleApiClient;
+    private Location lastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +111,11 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        if (lastLocation != null) {
+            latitude.setText(String.valueOf(lastLocation.getLatitude()));
+            longitude.setText(String.valueOf(lastLocation.getLongitude()));
+        }
     }
 
     @Override
