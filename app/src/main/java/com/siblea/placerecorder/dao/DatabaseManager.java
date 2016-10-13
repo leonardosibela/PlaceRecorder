@@ -4,12 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DatabaseManager extends SQLiteOpenHelper {
+class DatabaseManager extends SQLiteOpenHelper {
 
     private static final String BASE_NAME = "placerecorder.db";
     private static final int BASE_VERION = 1;
 
-    public DatabaseManager(Context context) {
+    DatabaseManager(Context context) {
         super(context, BASE_NAME, null, BASE_VERION);
     }
 
