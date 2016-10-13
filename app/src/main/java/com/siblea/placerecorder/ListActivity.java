@@ -9,6 +9,7 @@ import com.siblea.placerecorder.adapter.PlaceListAdapter;
 import com.siblea.placerecorder.model.Place;
 import com.siblea.placerecorder.presenter.PlaceListPresenter;
 import com.siblea.placerecorder.task.PlaceListTask;
+import com.siblea.placerecorder.view.DividerItemDecoration;
 
 import java.util.List;
 
@@ -21,7 +22,6 @@ public class ListActivity extends AppCompatActivity implements PlaceListTask.Vie
     RecyclerView recyclerView;
 
     private PlaceListPresenter presenter;
-    private List<Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class ListActivity extends AppCompatActivity implements PlaceListTask.Vie
     public void setPlaces(List<Place> places) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(new PlaceListAdapter(places));
     }
 }
