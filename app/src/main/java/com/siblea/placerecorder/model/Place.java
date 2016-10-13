@@ -8,14 +8,6 @@ public class Place {
     private long lat;
     private long lng;
 
-    public Place(int id, String name, String description, long lat, long lng) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.lat = lat;
-        this.lng = lng;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
