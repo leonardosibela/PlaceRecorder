@@ -76,8 +76,8 @@ public class PlaceDao {
         place.setId(cursor.getInt(cursor.getColumnIndex(ID)));
         place.setName(cursor.getString(cursor.getColumnIndex(NAME)));
         place.setDescription(cursor.getString(cursor.getColumnIndex(DESCRIPTION)));
-        place.setLat(cursor.getLong(cursor.getColumnIndex(LAT)));
-        place.setLng(cursor.getInt(cursor.getColumnIndex(LNG)));
+        place.setLat(cursor.getDouble(cursor.getColumnIndex(LAT)));
+        place.setLng(cursor.getDouble(cursor.getColumnIndex(LNG)));
 
         return place;
     }

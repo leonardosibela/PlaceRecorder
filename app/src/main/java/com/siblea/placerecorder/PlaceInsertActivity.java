@@ -20,7 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.place_name_input)
     EditText nameInput;
@@ -71,8 +72,8 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
             Place place = new Place();
             place.setName(nameInput.getText().toString().trim());
             place.setDescription(descriptionInput.getText().toString().trim());
-            place.setLat((long) Double.parseDouble(this.latitude.getText().toString().trim()));
-            place.setLng((long) Double.parseDouble(this.longitude.getText().toString().trim()));
+            place.setLat(lastLocation.getLatitude());
+            place.setLng(lastLocation.getLongitude());
             presenter.add(place);
         } else {
             displayFormErrors();
@@ -120,11 +121,18 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Toast.makeText(this, "Connection Suspended", Toast.LENGTH_LONG).show();
+        // Called when the client is temporarily in a disconnected state.
+        // This can happen if there is a problem with the remote service (e.g. a crash or resource problem causes it to be killed by the system).
+        // When called, all requests have been canceled and no outstanding listeners will be executed.
+        // GoogleApiClient will automatically attempt to restore the connection.
+        // Applications should disable UI components that require the service, and wait for a call to onConnected(Bundle) to re-enable them.
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show();
+        // It is called if there was an error connecting to the device (e.g. if Google Play services needs to be updated).
+        // There is nothing that you need to do here, but again you should log a message as an aid during debugging.
     }
 }
