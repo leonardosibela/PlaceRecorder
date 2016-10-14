@@ -1,10 +1,15 @@
 package com.siblea.placerecorder;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,17 +28,28 @@ import butterknife.OnClick;
 public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
     @BindView(R.id.place_name_input)
     EditText nameInput;
 
     @BindView(R.id.place_description_input)
     EditText descriptionInput;
 
+    @BindView(R.id.lat_label)
+    TextView latLabel;
+
     @BindView(R.id.latitude)
     TextView latitude;
 
+    @BindView(R.id.lng_label)
+    TextView lngLabel;
+
     @BindView(R.id.longitude)
     TextView longitude;
+
+    @BindView(R.id.add_place_button)
+    Button addPermissionButton;
 
     PlaceInsertTask.Presenter presenter;
     private GoogleApiClient googleApiClient;
@@ -80,6 +96,10 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
         }
     }
 
+    private boolean mustAskForLocationPermission() {
+        return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+    }
+
     private boolean formIsWellFilled() {
         return !nameInput.getText().toString().isEmpty() && !descriptionInput.getText().toString().isEmpty();
     }
@@ -112,10 +132,27 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        if (mustAskForLocationPermission()) {
+            askForLocationPermission();
+        } else {
+            updateLastLocation();
+        }
+    }
+
+    private void askForLocationPermission() {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_PERMISSIONS);
+    }
+
+    private void updateLastLocation() {
         lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
         if (lastLocation != null) {
             latitude.setText(String.valueOf(lastLocation.getLatitude()));
             longitude.setText(String.valueOf(lastLocation.getLongitude()));
+
+            latLabel.setVisibility(View.VISIBLE);
+            latitude.setVisibility(View.VISIBLE);
+            lngLabel.setVisibility(View.VISIBLE);
+            longitude.setVisibility(View.VISIBLE);
         }
     }
 
@@ -134,5 +171,31 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
         Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show();
         // It is called if there was an error connecting to the device (e.g. if Google Play services needs to be updated).
         // There is nothing that you need to do here, but again you should log a message as an aid during debugging.
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateLastLocation();
+                } else {
+                    displayLocationPermissionDeniedMessage();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void displayLocationPermissionDeniedMessage() {
+        Snackbar.make(addPermissionButton, "Location permission denied",
+                Snackbar.LENGTH_INDEFINITE).setAction("REASK", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                askForLocationPermission();
+            }
+        }).show();
     }
 }
