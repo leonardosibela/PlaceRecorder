@@ -22,5 +22,6 @@ public class PlaceInsertPresenter implements PlaceInsertTask.Presenter {
         placeDao.insert(place);
         placeDao.close();
         view.onPlaceAdded(place);
+        view.cleanFields();
     }
 }
