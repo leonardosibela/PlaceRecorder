@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.siblea.placerecorder.model.Place;
 import com.siblea.placerecorder.presenter.PlaceInsertPresenter;
@@ -26,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlaceInsertActivity extends AppCompatActivity implements PlaceInsertTask.View,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
@@ -54,6 +57,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
     PlaceInsertTask.Presenter presenter;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
+    private LocationRequest locationRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
                     .addApi(LocationServices.API)
                     .build();
         }
+        createLocationRequest();
     }
 
     protected void onStart() {
@@ -136,6 +141,25 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
             askForLocationPermission();
         } else {
             updateLastLocation();
+            startLocationUpdates();
+        }
+    }
+
+    protected void createLocationRequest() {
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateLastLocation();
+    }
+
+    protected void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
         }
     }
 
@@ -166,6 +190,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
         // Applications should disable UI components that require the service, and wait for a call to onConnected(Bundle) to re-enable them.
     }
 
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show();
@@ -173,13 +198,13 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
         // There is nothing that you need to do here, but again you should log a message as an aid during debugging.
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateLastLocation();
+                    startLocationUpdates();
                 } else {
                     displayLocationPermissionDeniedMessage();
                 }
