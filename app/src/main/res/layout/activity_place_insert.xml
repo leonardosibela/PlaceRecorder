@@ -32,6 +32,7 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:text="Lat:"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <TextView
@@ -59,6 +60,7 @@
         android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/longitude"
         android:text="Lng:"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <Button
