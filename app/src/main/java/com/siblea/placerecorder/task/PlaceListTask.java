@@ -8,6 +8,12 @@ public interface PlaceListTask {
 
     interface View {
         void setPlaces(List<Place> places);
+
+        void displayEmptyListMesssage();
+
+        void showProgressBar();
+
+        void hideProgressBar();
     }
 
     interface Presenter {

@@ -31,8 +31,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+
+        // Objeto que fornece uma maneira prática de unir o layout do Drawer e a ActionBar implementando um design recomendado para a navegação
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+
+        // Usado para alterar o icone da toolbar entre o de menu e o da seta
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
     }

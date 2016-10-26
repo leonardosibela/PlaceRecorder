@@ -19,9 +19,13 @@ public class PlaceInsertPresenter implements PlaceInsertTask.Presenter {
     @Override
     public void add(Place place) {
         placeDao.open();
-        placeDao.insert(place);
+        boolean inserted = placeDao.insert(place);
         placeDao.close();
-        view.onPlaceAdded(place);
-        view.cleanFields();
+        if (inserted) {
+            view.onSuccessAddingPlace(place);
+            view.cleanFields();
+        } else {
+            view.onErrorAddingPlace(place);
+        }
     }
 }

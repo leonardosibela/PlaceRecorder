@@ -7,9 +7,9 @@ import java.util.List;
 public interface PlaceInsertTask {
 
     interface View {
-        void onPlaceAdded(Place place);
+        void onSuccessAddingPlace(Place place);
 
-        void errorAddingPlace(Place place);
+        void onErrorAddingPlace(Place place);
 
         void cleanFields();
     }

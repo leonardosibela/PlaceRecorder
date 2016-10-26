@@ -40,7 +40,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
         return (places != null ? places.size() : 0);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.place_name)
         TextView placeName;

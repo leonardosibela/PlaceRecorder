@@ -20,9 +20,16 @@ public class PlaceListPresenter implements PlaceListTask.Presenter {
 
     @Override
     public void getAllPalces() {
+        view.showProgressBar();
+
         placeDao.open();
         List<Place> places = placeDao.selectAll();
         placeDao.close();
-        view.setPlaces(places);
+
+        if (places.isEmpty()) {
+            view.displayEmptyListMesssage();
+        } else {
+            view.setPlaces(places);
+        }
     }
 }

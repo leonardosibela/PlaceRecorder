@@ -54,7 +54,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
     @BindView(R.id.add_place_button)
     Button addPermissionButton;
 
-    PlaceInsertTask.Presenter presenter;
+    private PlaceInsertTask.Presenter presenter;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
     private LocationRequest locationRequest;
@@ -74,6 +74,7 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
                     .addApi(LocationServices.API)
                     .build();
         }
+
         createLocationRequest();
     }
 
@@ -120,12 +121,12 @@ public class PlaceInsertActivity extends AppCompatActivity implements PlaceInser
     }
 
     @Override
-    public void onPlaceAdded(Place place) {
+    public void onSuccessAddingPlace(Place place) {
         Toast.makeText(this, place.getName() + " inserted", Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public void errorAddingPlace(Place place) {
+    public void onErrorAddingPlace(Place place) {
         Toast.makeText(this, "Error inserting " + place.getName(), Toast.LENGTH_LONG).show();
     }
 

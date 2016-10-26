@@ -53,9 +53,10 @@ public class PlaceDao {
         return books;
     }
 
-    public long insert(Place place) {
+    public boolean insert(Place place) {
         ContentValues values = placeToContentValues(place);
-        return sqLiteDatabase.insert(TABLE, null, values);
+        long rowId = sqLiteDatabase.insert(TABLE, null, values);
+        return rowId != -1;
     }
 
     private ContentValues placeToContentValues(Place place) {

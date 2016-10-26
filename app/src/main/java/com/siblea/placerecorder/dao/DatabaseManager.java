@@ -18,11 +18,11 @@ class DatabaseManager extends SQLiteOpenHelper {
 
         String placeTableDDL =
                 "CREATE TABLE place (" +
-                        "id TEXT PRIMARY KEY, " +
+                        "id REAL PRIMARY KEY, " +
                         "name TEXT NOT NULL, " +
                         "description TEXT NOT NULL, " +
-                        "lat TEXT, " +
-                        "lng INTEGER)";
+                        "lat REAL, " +
+                        "lng REAL)";
 
         db.execSQL(placeTableDDL);
 
