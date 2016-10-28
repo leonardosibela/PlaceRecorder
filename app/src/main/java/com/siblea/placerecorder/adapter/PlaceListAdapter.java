@@ -1,11 +1,13 @@
 package com.siblea.placerecorder.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.siblea.placerecorder.ListActivity;
 import com.siblea.placerecorder.R;
 import com.siblea.placerecorder.model.Place;
 
@@ -17,9 +19,11 @@ import butterknife.ButterKnife;
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
 
     private List<Place> places;
+    private Callbacks callbacks;
 
-    public PlaceListAdapter(List<Place> places) {
+    public PlaceListAdapter(List<Place> places, Callbacks callbacks) {
         this.places = places;
+        this.callbacks = callbacks;
     }
 
     @Override
@@ -30,9 +34,16 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
-        Place place = places.get(i);
+        final Place place = places.get(i);
         holder.placeName.setText(place.getName());
         holder.placeDescription.setText(place.getDescription());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                callbacks.startDetailScreen(place);
+            }
+        });
     }
 
     @Override
@@ -52,5 +63,11 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
             super(view);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface Callbacks {
+
+        void startDetailScreen(Place place);
+
     }
 }

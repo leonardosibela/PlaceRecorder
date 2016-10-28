@@ -1,5 +1,6 @@
 package com.siblea.placerecorder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListActivity extends AppCompatActivity implements PlaceListTask.View {
+public class ListActivity extends AppCompatActivity implements PlaceListTask.View, PlaceListAdapter.Callbacks {
 
     @BindView(R.id.places_recycler)
     RecyclerView recyclerView;
@@ -48,7 +49,7 @@ public class ListActivity extends AppCompatActivity implements PlaceListTask.Vie
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(new PlaceListAdapter(places));
+        recyclerView.setAdapter(new PlaceListAdapter(places, this));
         recyclerView.setVisibility(View.VISIBLE);
     }
 
@@ -68,5 +69,19 @@ public class ListActivity extends AppCompatActivity implements PlaceListTask.Vie
     @Override
     public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void startDetailScreen(Place place) {
+        Intent intent = new Intent(this, PlaceDetailActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(PlaceDetailActivity.NAME, place.getName());
+        bundle.putString(PlaceDetailActivity.DESCRIPTION, place.getDescription());
+        bundle.putDouble(PlaceDetailActivity.LATITUDE, place.getLat());
+        bundle.putDouble(PlaceDetailActivity.LONGITUDE, place.getLng());
+
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
